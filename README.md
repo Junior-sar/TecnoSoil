@@ -16,7 +16,7 @@ Luis Romero Contreras · Isabella Barrera Babilonia
 - **Riega automáticamente** con una bomba (puente H L298N) cuando la humedad baja del umbral, y se pausa si
   el tanque tiene poca agua.
 - Muestra todo en una **LCD 20x4** física y en la interfaz de PC (PySide6), con gráficas de tendencia,
-  diagrama de estados y exportación a CSV. Los datos quedan listos para enviarse a una plataforma de monitoreo.
+  diagrama de estados y exportación a CSV.
 
 ## Estructura del repositorio
 

@@ -1,7 +1,6 @@
 import argparse
 import json
 import random
-import threading
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -275,25 +274,7 @@ class Canal(ABC):
 
 class CanalConsola(Canal):
     def enviar(self, texto):
-        print(f"[UART1 TX] {texto.strip()}")
-
-
-class CanalSerial(Canal):
-    def __init__(self, puerto):
-        super().__init__()
-        import serial
-        self._ser = serial.Serial(puerto, 9600, timeout=0.1)
-        threading.Thread(target=self._escuchar, daemon=True).start()
-
-    def enviar(self, texto):
-        self._ser.write(texto.encode())
-        print(f"[UART1 TX] {texto.strip()}")
-
-    def _escuchar(self):
-        while True:
-            datos = self._ser.read(100)
-            if datos:
-                self._notificar(datos.decode(errors="ignore"))
+        print(f"[DATOS] {texto.strip()}")
 
 
 class ProcesadorComandos:
@@ -393,11 +374,10 @@ class SistemaTecnoSoil:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="TecnoSoil en Python (POO)")
     parser.add_argument("--puerto-suelo", help="Adaptador USB-RS485 del sensor 7-en-1 (ej. COM5)")
-    parser.add_argument("--puerto-wifi", help="Puerto serie hacia la plataforma de monitoreo (ej. COM6)")
     args = parser.parse_args()
 
     sensor = SensorSueloModbus(args.puerto_suelo) if args.puerto_suelo else SensorSueloSimulado()
-    canal = CanalSerial(args.puerto_wifi) if args.puerto_wifi else CanalConsola()
+    canal = CanalConsola()
     try:
         SistemaTecnoSoil(sensor, canal).ejecutar()
     except KeyboardInterrupt:
