@@ -24,7 +24,7 @@ Luis Romero Contreras · Isabella Barrera Babilonia
 |---|---|
 | [`app/`](app) | Programa de PC: lógica POO (`compu_int.py`), interfaz (`interfaz_tecnosoil.py`), conexión con el ESP32 (`esp32_tecnosoil.py`), programa que corre en la placa (`esp32_puente.py`) y pruebas |
 | [`esp32_pruebas_por_sensor/`](esp32_pruebas_por_sensor) | Programas MicroPython para probar cada sensor por separado |
-| [`laboratorios/`](laboratorios) | Laboratorio 2: ESP32 → interfaz Python (Tkinter) → CSV, con su informe |
+| [`laboratorios/`](laboratorios) | Laboratorio 1 (lectura de sensores con MicroPython) y laboratorio 2 (ESP32 → interfaz Python → CSV), con sus informes |
 | [`docs/`](docs) | Informe del proyecto y diagramas (flujo, clases, estados, actividades, secuencia y casos de uso) |
 
 ## Conexiones (ESP32-S3)

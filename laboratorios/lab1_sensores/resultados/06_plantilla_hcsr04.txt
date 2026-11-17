@@ -1,0 +1,18 @@
+Iniciando HC-SR04 ...
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.43
+[HC-SR04] dist_cm=5.44
+[HC-SR04] dist_cm=5.44

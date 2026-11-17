@@ -1,0 +1,10 @@
+Iniciando DHT22 ...
+[DHT22] hum_%=54.40, temp_C=26.50
+[DHT22] hum_%=54.40, temp_C=26.50
+[DHT22] hum_%=54.40, temp_C=26.40
+[DHT22] hum_%=54.30, temp_C=26.50
+[DHT22] hum_%=54.30, temp_C=26.50
+[DHT22] hum_%=54.40, temp_C=26.50
+[DHT22] hum_%=54.40, temp_C=26.50
+[DHT22] hum_%=54.40, temp_C=26.50
+[DHT22] hum_%=54.40, temp_C=26.50
