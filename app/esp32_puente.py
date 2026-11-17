@@ -30,12 +30,18 @@ class LCD20x4:
     def __init__(self, i2c, direccion=0x27):
         self.i2c, self.dir = i2c, direccion
         time.sleep_ms(50)
-        for n in (0x30, 0x30, 0x30, 0x20):   # secuencia de arranque en modo 4 bits
+        self._sincronizar()
+        self._enviar(0x01, 0)                # borrar
+        time.sleep_ms(2)
+
+    def _sincronizar(self):
+        """Vuelve a poner la LCD en modo 4 bits. Si un ruido (p. ej. al arrancar la bomba) le hizo
+        perder medio byte, sin esto mostraría caracteres raros hasta reiniciarla."""
+        for n in (0x30, 0x30, 0x30, 0x20):
             self._nibble(n)
             time.sleep_ms(5)
-        for c in (0x28, 0x0C, 0x06, 0x01):   # 4 bits 2 líneas, display on, avance, borrar
+        for c in (0x28, 0x0C, 0x06):         # 4 bits 2 líneas, display on, avance
             self._enviar(c, 0)
-        time.sleep_ms(2)
 
     def _nibble(self, b):
         self.i2c.writeto(self.dir, bytes([b | 0x0C, (b | 0x08) & ~0x04]))   # pulso en E, luz encendida
@@ -45,6 +51,7 @@ class LCD20x4:
         self._nibble(((b << 4) & 0xF0) | rs)
 
     def mostrar(self, lineas):
+        self._sincronizar()
         for f in range(4):
             texto = (lineas[f] if f < len(lineas) else "")[:20]
             self._enviar(0x80 | self.FILAS[f], 0)
