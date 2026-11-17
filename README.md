@@ -52,7 +52,7 @@ python interfaz_tecnosoil.py --puerto-esp32 auto # con el ESP32 conectado (o abr
 
 ```
 cd app
-python -m unittest -v test_tecnosoil   # 32 pruebas unitarias, no necesitan la placa
+python -m unittest -v test_tecnosoil   # 33 pruebas unitarias, no necesitan la placa
 python prueba_hardware.py              # prueba cada componente conectado al ESP32
 ```
 

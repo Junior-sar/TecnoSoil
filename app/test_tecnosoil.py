@@ -119,6 +119,16 @@ class TestSensores(unittest.TestCase):
         s = SensorSueloESP32(ConexionFalsa({"s": None})).leer()
         self.assertFalse(s.es_valida)
 
+    def test_suelo_simulado_estable_es_realista(self):
+        sensor = ci.SensorSueloSimuladoEstable()
+        anterior = sensor.leer()
+        for _ in range(200):
+            s = sensor.leer()
+            self.assertTrue(s.es_valida)
+            self.assertTrue(40 <= s.humedad <= 50 and 5.9 <= s.ph <= 7.1)
+            self.assertLessEqual(abs(s.humedad - anterior.humedad), 0.41)  # cambia poco entre lecturas
+            anterior = s
+
     def test_crc16_modbus(self):
         # Trama de ejemplo estándar: 01 03 00 00 00 01 -> CRC 84 0A
         self.assertEqual(ci.SensorSueloModbus.crc16(bytes([1, 3, 0, 0, 0, 1])), bytes([0x84, 0x0A]))

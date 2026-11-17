@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
 from compu_int import (
     BaseDatosPlantas, Bomba, Canal, CanalConsola, ControladorRiego, LecturaAmbiente,
     LecturaSuelo, MotorPuenteH, Pantalla, ProcesadorComandos, SensorDHT11, SensorNivel,
-    SensorSueloModbus, SensorSueloSimulado, SistemaTecnoSoil,
+    SensorSueloModbus, SensorSueloSimulado, SensorSueloSimuladoEstable, SistemaTecnoSoil,
 )
 from esp32_tecnosoil import (
     ConexionESP32, MotorESP32, PantallaLCDESP32, SensorDHT22ESP32, SensorNivelESP32, SensorSueloESP32,
@@ -556,7 +556,8 @@ class VentanaTecnoSoil(QMainWindow):
         for cb, elegido in ((self.cb_esp32, esp32), (self.cb_suelo, suelo)):
             actual = elegido or cb.currentText() or SIMULADO
             cb.clear()
-            cb.addItems([SIMULADO] + (["auto"] if cb is self.cb_esp32 else []) + puertos)
+            extra = ["auto"] if cb is self.cb_esp32 else [POR_ESP32]
+            cb.addItems([SIMULADO] + extra + puertos)
             cb.setCurrentText(actual)
         self._sincronizar_suelo()
 
@@ -564,10 +565,11 @@ class VentanaTecnoSoil(QMainWindow):
         return self.cb_esp32.currentText().strip() not in ("", SIMULADO)
 
     def _sincronizar_suelo(self):
-        """Con ESP32, el 7-en-1 se lee por su módulo RS485: la casilla del adaptador USB no aplica."""
+        """Con ESP32 el 7-en-1 se lee por su módulo RS485, o se elige "Simulado" (p. ej. sin tierra a mano)."""
         if self._usa_esp32():
-            self.cb_suelo.setCurrentText(POR_ESP32)
-            self.cb_suelo.setEnabled(False)
+            if self.cb_suelo.currentText() not in (POR_ESP32, SIMULADO):
+                self.cb_suelo.setCurrentText(POR_ESP32)
+            self.cb_suelo.setEnabled(self.btn_iniciar.isEnabled())
         else:
             if self.cb_suelo.currentText() == POR_ESP32:
                 self.cb_suelo.setCurrentText(SIMULADO)
@@ -587,8 +589,11 @@ class VentanaTecnoSoil(QMainWindow):
                 p_esp32 = self.conexion.puerto  # "auto" ya resuelto al COM real
                 dht = SensorDHT22ESP32(self.conexion)
                 nivel = SensorNivelESP32(self.conexion, self.sp_tanque.value())
-                sensor = SensorSueloESP32(self.conexion)
-                p_suelo = f"ESP32 en {p_esp32}"
+                if p_suelo == SIMULADO:
+                    sensor = SensorSueloSimuladoEstable()
+                else:
+                    sensor = SensorSueloESP32(self.conexion)
+                    p_suelo = f"ESP32 en {p_esp32}"
                 time.sleep(2.5)  # da tiempo a la primera línea de datos
         except ImportError:
             QMessageBox.critical(self, "Falta pyserial", "Instale pyserial: pip install pyserial")

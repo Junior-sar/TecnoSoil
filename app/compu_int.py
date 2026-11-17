@@ -160,6 +160,25 @@ class SensorSueloSimulado(SensorSuelo):
         return random.randint(*self.RANGOS[direccion])
 
 
+class SensorSueloSimuladoEstable(SensorSuelo):
+    """Suelo simulado con valores de un suelo agrícola típico que cambian poco entre lecturas
+    (paseo aleatorio acotado), para demostraciones sin tierra. Se muestra como "Simulado"."""
+
+    BASE = [452, 262, 480, 65, 48, 26, 182]      # hum 45.2 %, 26.2 °C, 480 uS/cm, pH 6.5, N, P, K
+    PASO = [4, 2, 6, 1, 1, 1, 2]                 # cambio máximo por lectura (en unidades crudas)
+    MARGEN = [25, 12, 40, 3, 5, 3, 12]           # cuánto se puede alejar de la base
+
+    def __init__(self):
+        self._actual = list(self.BASE)
+
+    def _leer_registro(self, direccion):
+        if direccion == 0:                       # una lectura completa empieza en el registro 0
+            for i, base in enumerate(self.BASE):
+                v = self._actual[i] + random.randint(-self.PASO[i], self.PASO[i])
+                self._actual[i] = max(base - self.MARGEN[i], min(base + self.MARGEN[i], v))
+        return self._actual[direccion]
+
+
 class SensorSueloModbus(SensorSuelo):
     """Modbus RTU por adaptador USB-RS485 (4800 baudios, ID 1, función 0x03)."""
 
